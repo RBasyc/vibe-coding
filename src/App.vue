@@ -1,85 +1,82 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
+import { onMounted } from 'vue'
+
+// 防止页面切换时的滚动问题
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <RouterView v-slot="{ Component, route }">
+    <Transition :name="(route.meta.transition as string) || 'fade'" mode="out-in">
+      <component :is="Component" :key="route.path" />
+    </Transition>
+  </RouterView>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+/* Router Transition Animations */
+
+/* Fade Transition - Default */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+/* Slide Fade Transition */
+.slide-fade-enter-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 
-nav a:first-of-type {
-  border: 0;
+/* Scale Fade Transition */
+.scale-fade-enter-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.scale-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.scale-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.95);
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.scale-fade-leave-to {
+  opacity: 0;
+  transform: scale(1.02);
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+/* Splash Transition */
+.splash-enter-active,
+.splash-leave-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.splash-enter-from,
+.splash-leave-to {
+  opacity: 0;
+  transform: scale(1.05);
 }
 </style>

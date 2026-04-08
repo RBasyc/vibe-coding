@@ -6,16 +6,26 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/splash',
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/splash',
+      name: 'splash',
+      component: () => import('../views/SplashView.vue'),
+      meta: { transition: 'fade' },
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: HomeView,
+      meta: { transition: 'fade' },
+    },
+    {
+      path: '/games/:id',
+      name: 'game',
+      component: () => import('../views/GameView.vue'),
+      props: true,
+      meta: { transition: 'slide-fade' },
     },
   ],
 })
